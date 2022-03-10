@@ -13,11 +13,6 @@ class Stock:
     ret: float
 
 
-class Percent(float):
-    def __str__(self):
-        return '{:.2%}'.format(self)
-
-
 with open("data/dataset_light.csv", "r") as dataset:
     data_reader = csv.reader(dataset)
     next(data_reader, None)
@@ -43,7 +38,7 @@ for combination in binary_words:
     for i in range(n):
         if combination[i] == "1":
             combination_cost += stocks[i].cost
-            combination_return += stocks[i].ret
+            combination_return += stocks[i].cost * stocks[i].ret
     if combination_cost <= max_investment:
         valid_investments.append((combination, combination_cost, combination_return))
 
@@ -56,11 +51,16 @@ for combination in valid_investments:
         best_investment_cost = combination[1]
         highest_return = combination[2]
 
-stocks_to_buy = []
-for i in range(len(best_investment)):
-    if best_investment[i] == "1":
-        stocks_to_buy.append(stocks[i].name)
+stocks_to_buy = [
+    stocks[i].name
+    for i in range(len(best_investment))
+    if best_investment[i] == "1"
+]
 
-pprint((stocks_to_buy, best_investment_cost, Percent(highest_return).__str__()))
+stocks_to_buy = f'Actions à acheter : {stocks_to_buy}'
+best_investment_cost = f'Coût de l\'investissement : {best_investment_cost}€'
+highest_return = f'Retour sur investissement : {round(highest_return, 2)}€'
+
+pprint((stocks_to_buy, best_investment_cost, highest_return))
 
 print(time.time() - start_time, "seconds")
