@@ -9,7 +9,7 @@ start_time = time.time()
 @dataclass
 class Stock:
     name: str
-    cost: int
+    cost: float
     ret: float
 
 
@@ -19,11 +19,12 @@ with open("data/dataset_light.csv", "r") as dataset:
     stocks = []
     for line in data_reader:
         name = line[0]
-        cost = line[1]
-        ret = line[2]
+        cost = float(line[1])
+        ret = float(line[2])
 
-        stock = Stock(name, int(cost), float(ret))
-        stocks.append(stock)
+        if cost > 0 and ret > 0:
+            stock = Stock(name, cost, ret)
+            stocks.append(stock)
 
 n = len(stocks)
 int_list = list(range(2**n))
