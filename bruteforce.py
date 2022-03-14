@@ -27,8 +27,8 @@ with open("data/dataset_light.csv", "r") as dataset:
             stocks.append(stock)
 
 n = len(stocks)
-int_list = list(range(2**n))
-binary_list = [bin(i)[2:] for i in int_list]
+possible_combinations = range(2 ** n)
+binary_list = [bin(i)[2:] for i in possible_combinations]
 binary_words = ["0"*(n-len(k)) + k for k in binary_list]
 
 max_investment = 500
