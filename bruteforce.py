@@ -28,35 +28,30 @@ with open("data/dataset_light.csv", "r") as dataset:
 
 n = len(stocks)
 possible_combinations = range(2 ** n)
-binary_list = [bin(i)[2:] for i in possible_combinations]
-binary_words = ["0"*(n-len(k)) + k for k in binary_list]
-
 max_investment = 500
-valid_investments = []
-for combination in binary_words:
+stocks_to_buy = []
+best_investment_cost = 0
+highest_return = 0
+
+for combination in possible_combinations:
+    binary_combi = bin(combination)[2:]
+    binary_word = ("0" * (n - len(binary_combi)) + binary_combi)
     combination_cost = 0
     combination_return = 0
     for i in range(n):
-        if combination[i] == "1":
+        if binary_word[i] == "1":
             combination_cost += stocks[i].cost
             combination_return += stocks[i].cost * stocks[i].ret
-    if combination_cost <= max_investment:
-        valid_investments.append((combination, combination_cost, combination_return))
+            if combination_cost <= max_investment and combination_return > highest_return:
+                best_investment = binary_word
+                best_investment_cost = combination_cost
+                highest_return = combination_return
 
-best_investment = valid_investments[0][0]
-best_investment_cost = valid_investments[0][1]
-highest_return = valid_investments[0][2]
-for combination in valid_investments:
-    if combination[2] > highest_return:
-        best_investment = combination[0]
-        best_investment_cost = combination[1]
-        highest_return = combination[2]
-
-stocks_to_buy = [
-    stocks[i].name
-    for i in range(len(best_investment))
-    if best_investment[i] == "1"
-]
+                stocks_to_buy = [
+                    stocks[i].name
+                    for i in range(len(best_investment))
+                    if best_investment[i] == "1"
+                ]
 
 stocks_to_buy = f'Actions à acheter : {stocks_to_buy}'
 best_investment_cost = f'Coût de l\'investissement : {best_investment_cost}€'
