@@ -30,6 +30,7 @@ n = len(stocks)
 possible_combinations = range(2 ** n)
 max_investment = 500
 stocks_to_buy = []
+best_investment = ""
 best_investment_cost = 0
 highest_return = 0
 
@@ -42,20 +43,21 @@ for combination in possible_combinations:
         if binary_word[i] == "1":
             combination_cost += stocks[i].cost
             combination_return += stocks[i].cost * stocks[i].ret
-            if combination_cost <= max_investment and combination_return > highest_return:
-                best_investment = binary_word
-                best_investment_cost = combination_cost
-                highest_return = combination_return
+    if combination_cost <= max_investment and combination_return > highest_return:
+        best_investment = binary_word
+        best_investment_cost = combination_cost
+        highest_return = combination_return
 
-                stocks_to_buy = [
-                    stocks[i].name
-                    for i in range(len(best_investment))
-                    if best_investment[i] == "1"
-                ]
 
-stocks_to_buy = f'Actions à acheter : {stocks_to_buy}'
-best_investment_cost = f'Coût de l\'investissement : {best_investment_cost}€'
-highest_return = f'Retour sur investissement : {round(highest_return, 2)}€'
+stocks_to_buy = [
+    stocks[i].name
+    for i in range(len(best_investment))
+    if best_investment[i] == "1"
+]
+
+stocks_to_buy = f'Need to buy : {stocks_to_buy}'
+best_investment_cost = f'Cost : {best_investment_cost}€'
+highest_return = f'Profit : {round(highest_return, 2)}€'
 
 pprint((stocks_to_buy, best_investment_cost, highest_return))
 
