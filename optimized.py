@@ -1,7 +1,6 @@
 import time
 import csv
 from dataclasses import dataclass
-from pprint import pprint
 
 start_time = time.time()
 
@@ -29,59 +28,11 @@ with open("data/dataset2_Python+P7.csv", "r") as dataset:
 
 n = len(stocks)
 max_investment = 50000
-costs = []
-for i in stocks:
-    costs.append(i.cost)
-rets = []
-for i in stocks:
-    rets.append(i.cost * i.ret)
-stocks_names = []
-for i in stocks:
-    stocks_names.append(i.name)
-
-
-def solve_bruteforce(profits, weights, capacity):
-    return solve_bruteforce_recursive(profits, weights, capacity, 0)
-
-
-def solve_bruteforce_recursive(profits, weights, capacity, current_index):
-    if capacity <= 0 or current_index >= len(profits):
-        return 0
-
-    profit1 = 0
-    if weights[current_index] <= capacity:
-        profit1 = profits[current_index] + solve_bruteforce_recursive(
-            profits, weights, capacity - weights[current_index], current_index + 1)
-
-    profit2 = solve_bruteforce_recursive(profits, weights, capacity, current_index + 1)
-
-    return max(profit1, profit2)
+costs = [i.cost for i in stocks]
+rets = [i.cost * i.ret for i in stocks]
 
 
 def solve_dynamic(profits, weights, capacity):
-    table = [[-1 for _ in range(capacity+1)] for _ in range(len(profits))]
-    return solve_dynamic_recursive(table, profits, weights, capacity, 0)
-
-
-def solve_dynamic_recursive(table, profits, weights, capacity, current_index):
-    if capacity <= 0 or current_index >= len(profits):
-        return 0
-
-    if table[current_index][capacity] != -1:
-        return table[current_index][capacity]
-
-    profit1 = 0
-    if weights[current_index] <= capacity:
-        profit1 = profits[current_index] + solve_dynamic_recursive(
-            table, profits, weights, capacity - weights[current_index], current_index + 1)
-
-    profit2 = solve_dynamic_recursive(table, profits, weights, capacity, current_index + 1)
-
-    table[current_index][capacity] = max(profit1, profit2)
-    return table[current_index][capacity]
-
-
-def solve_bottomup(profits, weights, capacity):
     if capacity <= 0 or n == 0 or len(weights) != n:
         return 0
 
@@ -108,20 +59,25 @@ def solve_bottomup(profits, weights, capacity):
 
 def print_selected_stocks(table, profits, weights, capacity):
     print("Need to buy: ", end='\n')
+    investment_cost = 0
     total_profit = table[n - 1][capacity]
     for i in range(n - 1, 0, -1):
-        if total_profit != table[i - 1][capacity]:
-            print(f'{str(stocks[i].name)} ', end='\n')
-            capacity -= weights[i]
-            total_profit -= profits[i]
+        try:
+            if total_profit != table[i - 1][capacity]:
+                print(f'{str(stocks[i].name)} ', end='\n')
+                investment_cost += weights[i]
+                capacity -= weights[i]
+                total_profit -= profits[i]
+        except IndexError:
+            break
 
     if total_profit != 0:
         print(f'{str(stocks[0].name)} ', end='')
+        investment_cost += stocks[0].cost
     print()
+    print(f'Cost : {investment_cost / 100}€')
 
 
-# print(solve_bruteforce(rets, costs, max_investment))
-# print(solve_dynamic(rets, costs, max_investment) / 100)
-print(solve_bottomup(rets, costs, max_investment) / 100)
+print(f'Profit : {solve_dynamic(rets, costs, max_investment) / 100}€')
 
 print(time.time() - start_time, "seconds")
