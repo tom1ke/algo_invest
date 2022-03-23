@@ -1,5 +1,5 @@
-import csv
 import time
+import csv
 from dataclasses import dataclass
 
 start_time = time.time()
@@ -12,7 +12,11 @@ class Stock:
     ret: float
 
 
-with open("data/dataset_light.csv", "r") as dataset:
+dataset0 = "data/dataset_light.csv"
+dataset1 = "data/dataset1_Python+P7.csv"
+dataset2 = "data/dataset2_Python+P7.csv"
+
+with open(dataset0, "r") as dataset:
     data_reader = csv.reader(dataset)
     next(data_reader, None)
     stocks = []
