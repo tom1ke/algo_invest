@@ -19,7 +19,7 @@ with open("data/dataset_light.csv", "r") as dataset:
     for line in data_reader:
         name = line[0]
         cost = float(line[1])
-        ret = float(line[2])
+        ret = float(line[2]) / 100
 
         if cost > 0 and ret > 0:
             stock = Stock(name, cost, ret)
@@ -51,6 +51,6 @@ for i in range(len(best_investment)):
     if best_investment[i] == "1":
         print(stocks[i].name)
 print(f'Cost : {best_investment_cost}€')
-print(f'Profit : {round(highest_return / 100, 2)}€')
+print(f'Profit : {round(highest_return, 2)}€')
 
 print(time.time() - start_time, "seconds")
