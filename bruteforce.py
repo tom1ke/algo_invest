@@ -1,7 +1,6 @@
 import csv
 import time
 from dataclasses import dataclass
-from pprint import pprint
 
 start_time = time.time()
 
@@ -29,7 +28,6 @@ with open("data/dataset_light.csv", "r") as dataset:
 n = len(stocks)
 possible_combinations = range(2 ** n)
 max_investment = 500
-stocks_to_buy = []
 best_investment = ""
 best_investment_cost = 0
 highest_return = 0
@@ -48,17 +46,11 @@ for combination in possible_combinations:
         best_investment_cost = combination_cost
         highest_return = combination_return
 
-
-stocks_to_buy = [
-    stocks[i].name
-    for i in range(len(best_investment))
-    if best_investment[i] == "1"
-]
-
-stocks_to_buy = f'Need to buy : {stocks_to_buy}'
-best_investment_cost = f'Cost : {best_investment_cost}€'
-highest_return = f'Profit : {round(highest_return, 2)}€'
-
-pprint((stocks_to_buy, best_investment_cost, highest_return))
+print("Need to buy : ")
+for i in range(len(best_investment)):
+    if best_investment[i] == "1":
+        print(stocks[i].name)
+print(f'Cost : {best_investment_cost}€')
+print(f'Profit : {round(highest_return / 100, 2)}€')
 
 print(time.time() - start_time, "seconds")
