@@ -9,27 +9,31 @@ start_time = time.time()
 class Stock:
     name: str
     cost: int
-    ret: float
+    profit: float
 
 
-with open("data/dataset2_Python+P7.csv", "r") as dataset:
+dataset0 = "data/dataset_light.csv"
+dataset1 = "data/dataset1_Python+P7.csv"
+dataset2 = "data/dataset2_Python+P7.csv"
+
+with open(dataset2, "r") as dataset:
     data_reader = csv.reader(dataset)
     next(data_reader, None)
     stocks = []
     for line in data_reader:
         name = line[0]
         cost = int(float(line[1]) * 100)
-        ret = float(line[2]) / 100
+        profit = float(line[2]) / 100
 
-        if cost > 0 and ret > 0:
-            stock = Stock(name, cost, ret)
+        if cost > 0 and profit > 0:
+            stock = Stock(name, cost, profit)
             stocks.append(stock)
 
 
 n = len(stocks)
 max_investment = 50000
 costs = [i.cost for i in stocks]
-rets = [i.cost * i.ret for i in stocks]
+profits = [i.cost * i.profit for i in stocks]
 
 
 def solve_dynamic(profits, weights, capacity):
@@ -63,7 +67,7 @@ def print_selected_stocks(table, profits, weights, capacity):
     total_profit = table[n - 1][capacity]
     for i in range(n - 1, 0, -1):
         try:
-            if total_profit != table[i - 1][capacity]:
+            if total_profit != table[i - 1][capacity] and weights[i] <= capacity:
                 print(f'{str(stocks[i].name)} ', end='\n')
                 investment_cost += weights[i]
                 capacity -= weights[i]
@@ -71,13 +75,14 @@ def print_selected_stocks(table, profits, weights, capacity):
         except IndexError:
             break
 
-    if total_profit != 0:
+    if total_profit != 0 and weights[0] <= capacity:
         print(f'{str(stocks[0].name)} ', end='')
-        investment_cost += stocks[0].cost
+        investment_cost += weights[0]
     print()
     print(f'Cost : {investment_cost / 100}€')
 
 
-print(f'Profit : {solve_dynamic(rets, costs, max_investment) / 100}€')
+highest_profit = solve_dynamic(profits, costs, max_investment) / 100
+print(f'Profit : {round(highest_profit, 2)}€')
 
 print(time.time() - start_time, "seconds")
