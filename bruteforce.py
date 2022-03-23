@@ -50,6 +50,7 @@ print("Need to buy : ")
 for i in range(len(best_investment)):
     if best_investment[i] == "1":
         print(stocks[i].name)
+print()
 print(f'Cost : {best_investment_cost}€')
 print(f'Profit : {round(highest_return, 2)}€')
 
