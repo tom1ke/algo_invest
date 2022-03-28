@@ -25,7 +25,7 @@ dataset1 = "data/dataset1_Python+P7.csv"
 dataset2 = "data/dataset2_Python+P7.csv"
 
 # Lecteur CSV prenant l'une des variables précédentes comme source
-with open(dataset1, "r") as dataset:
+with open(dataset0, "r") as dataset:
     data_reader = csv.reader(dataset)
     next(data_reader, None)
     stocks = []
