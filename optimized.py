@@ -45,7 +45,8 @@ with open(dataset0, "r") as dataset:
 # Nombre d'actions contenue dans la liste
 n = len(stocks)
 
-max_investment = 50000
+# Multiplication par 100 pour correspondre aux valeurs modifiées du dataset
+max_investment = 500 * 100
 
 # Listes des prix et des profits de toutes les actions
 costs = [i.cost for i in stocks]
